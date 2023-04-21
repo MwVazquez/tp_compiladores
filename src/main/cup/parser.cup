@@ -24,6 +24,16 @@ terminal P_COMA;
 terminal COMA;
 terminal LLAVEABRE;
 terminal LLAVECIERRA;
+terminal CICLO;
+terminal AND;
+terminal OR;
+terminal NOT;
+terminal MAYOR;
+terminal MAYOR_IGUAL;
+terminal MENOR;
+terminal MENOR_IGUAL;
+terminal DISTINTO;
+terminal IGUAL;
 
 
 
@@ -44,6 +54,10 @@ non terminal declaraciones;
 non terminal bloque;
 non terminal lista_de_variables;
 non terminal tipodato;
+non terminal ciclo;
+non terminal si;
+non terminal condicion_mul;
+non terminal condicion;
 
 
 
@@ -64,15 +78,29 @@ tipodato ::= CHAR|INT|FLOAT|STRING {: System.out.println("Tipo de dato"); :};
 
 bloque ::= sentence {: System.out.println("bloque ---> sentencia \n"); :}
                      |bloque sentence {: System.out.println("bloque ---> bloque sentencia\n"); :};
+sentence ::= assignment  {: System.out.println("End Assignment"); :}
+           | ciclo {: System.out.println("End ciclo"); :}
+           | si {: System.out.println("End if"); :};
+ciclo ::=  CICLO OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("Ciclo"); :};
+
+condicion_mul ::= condicion AND condicion {: System.out.println("condicion_mul ---> condicion AND condicion "); :}
+                                 | condicion OR condicion {: System.out.println("condicion_mul ---> condicion OR condicion "); :}
+                                 | NOT condicion {: System.out.println("condicion_mul ---> NOT condicion "); :}
+                                 | condicion {: System.out.println("condicion_mul ---> condicion "); :};
+
+condicion ::= expression MAYOR expression {: System.out.println("condicion ---> expresion MAYOR expresion "); :}
+          |expression MENOR expression {: System.out.println("condicion ---> expresion MENOR expresion "); :}
+          |expression MAYOR_IGUAL expression {: System.out.println("condicion ---> expresion MAYOR_IGUAL expresion "); :}
+          |expression MENOR_IGUAL expression {: System.out.println("condicion ---> expresion MENOR_IGUAL expresion "); :}
+          |expression IGUAL expression {: System.out.println("condicion ---> expresion IGUAL expresion \n"); :}
+          |expression DISTINTO expression {: System.out.println("expresion DISTINTO expresion\n"); :};
 
 
 
-
-sentence ::= assignment  {: System.out.println("End"); :};
 assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};
-datatype2 ::= INT  {: System.out.println("Int"); :};
-datatype2 ::= FLOAT  {: System.out.println("Float"); :};
-datatype2 ::= CHAR  {: System.out.println("Char"); :};
+//datatype2 ::= INT  {: System.out.println("Int"); :};
+//datatype2 ::= FLOAT  {: System.out.println("Float"); :};
+//datatype2 ::= CHAR  {: System.out.println("Char"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};

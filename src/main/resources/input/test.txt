@@ -7,3 +7,12 @@ init {
     p1, p2, p3 : String
 }
 a = 5
+*-This is a commen-*
+*-This is a commen-*
+*-This is a commen-*
+*-This is a commen-*
+*-This is a commen-*
+ciclo (a > b)
+{
+    a = a + 1+3
+}

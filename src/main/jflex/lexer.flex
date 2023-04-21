@@ -55,6 +55,17 @@ PuntoYcoma = ";"
 Coma = ","
 LlaveAbre = "{"
 LlaveCierra = "}"
+And = "&"
+Or = "||"
+Not = "not"
+Mayor = ">"
+MayorIgual = ">="
+Menor = "<"
+MenorIgual = "<="
+Igual = "=="
+Distinto = "<>"
+
+Ciclo = "ciclo"
 
 
 Comentario = {Mult}{Guion} {Caracter}* {Guion}{Mult}
@@ -77,10 +88,9 @@ IntegerConstant = {Digit}+
 
   /* reserved words */
   {Init}                                    { System.out.println("Init");return symbol(ParserSym.INIT); }
+  {Ciclo}                                   { System.out.println("Ciclo");return symbol(ParserSym.CICLO); }
 
-  /* identifiers */
-  {Identifier}                             { System.out.println("Identifier: "+ yytext());
-                                            return symbol(ParserSym.IDENTIFIER, yytext()); }
+
   /* Constants */
   {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
   /* Comments */
@@ -95,6 +105,23 @@ IntegerConstant = {Digit}+
   {Sub}                                     { return symbol(ParserSym.SUB); }
   {Mult}                                    { return symbol(ParserSym.MULT); }
   {Div}                                     { return symbol(ParserSym.DIV); }
+  {And}                                     { return symbol(ParserSym.AND); }
+  {Not}                                     { return symbol(ParserSym.NOT); }
+  {Or}                                      { return symbol(ParserSym.OR); }
+
+  {Mayor}                                  { return symbol(ParserSym.MAYOR); }
+  {MayorIgual}                             { return symbol(ParserSym.MAYOR_IGUAL); }
+  {Menor}                                  { return symbol(ParserSym.MENOR); }
+  {MenorIgual}                             { return symbol(ParserSym.MENOR_IGUAL); }
+  {Igual}                                  { return symbol(ParserSym.IGUAL); }
+  {Distinto}                               { return symbol(ParserSym.DISTINTO); }
+
+
+
+
+
+
+
 
   /* simbols */
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
@@ -105,6 +132,10 @@ IntegerConstant = {Digit}+
   {Coma}                                    { System.out.println("coma"); return symbol(ParserSym.COMA); }
   {LlaveAbre}                               { return symbol(ParserSym.LLAVEABRE); }
   {LlaveCierra}                             { System.out.println("}");return symbol(ParserSym.LLAVECIERRA); }
+
+  /* identifiers */
+    {Identifier}                             { System.out.println("Identifier: "+ yytext());
+                                              return symbol(ParserSym.IDENTIFIER, yytext()); }
 
   /* whitespace */
   {WhiteSpace}                               { /* ignore */ }
