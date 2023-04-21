@@ -10,7 +10,6 @@ terminal PLUS;
 terminal SUB;
 terminal MULT;
 terminal DIV;
-terminal BACKSLASH;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal INTEGER_CONSTANT;
@@ -18,7 +17,14 @@ terminal IDENTIFIER;
 terminal INT;
 terminal CHAR;
 terminal FLOAT;
+terminal STRING;
 terminal INIT;
+terminal TWOPOINTS;
+terminal P_COMA;
+terminal COMA;
+terminal LLAVEABRE;
+terminal LLAVECIERRA;
+
 
 
 
@@ -35,16 +41,32 @@ non terminal programa;
 non terminal starting;
 non terminal bloque_declaraciones;
 non terminal declaraciones;
+non terminal bloque;
+non terminal lista_de_variables;
+non terminal tipodato;
+
 
 
 
 
 // Start Symbol Definition
 start with starting;
-starting ::=  bloque_declaraciones  {: System.out.println("inicio --->  bloque_declaraciones programa"); :};
-//                    | programa {: System.out.println("inicio ---> programa \n"); :};
-bloque_declaraciones ::= sentence {: System.out.println("bloque_declaraciones ---> declaraciones\n"); :}
-                     | bloque_declaraciones sentence {: System.out.println("bloque_declaraciones ---> bloque_declaraciones declaraciones\n"); :};
+starting ::= INIT LLAVEABRE bloque_declaraciones LLAVECIERRA bloque {: System.out.println("starting --->  bloque_declaraciones programa"); :}
+             | bloque {: System.out.println("inicio ---> programa"); :};
+bloque_declaraciones ::= declaraciones {: System.out.println("bloque_declaraciones ---> declaraciones"); :} |
+                         bloque_declaraciones declaraciones {: System.out.println("bloque_declaraciones ---> bloque_declaraciones declaraciones"); :};
+declaraciones::= lista_de_variables TWOPOINTS tipodato  {: System.out.println("declaraciones ---> lista_de_variables DECLARACION tipodato P_COMA"); :};
+
+lista_de_variables::= IDENTIFIER  {: System.out.println("lista_de_variables ---> ID\n"); :} |
+                      lista_de_variables COMA IDENTIFIER  {: System.out.println("lista_de_variables ---> lista_de_variables COMA ID"); :};
+
+tipodato ::= CHAR|INT|FLOAT|STRING {: System.out.println("Tipo de dato"); :};
+
+bloque ::= sentence {: System.out.println("bloque ---> sentencia \n"); :}
+                     |bloque sentence {: System.out.println("bloque ---> bloque sentencia\n"); :};
+
+
+
 
 sentence ::= assignment  {: System.out.println("End"); :};
 assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};

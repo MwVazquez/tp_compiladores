@@ -44,11 +44,18 @@ CloseBracket = ")"
 Int = "Int"
 Char = "Char"
 Float = "Float"
+String = "String"
 Letter = [a-zA-Z]
 Digit = [0-9]
 Guion = "-"
 Caracter = [a-z|A-Z|0-9|=|>|<|!|:|+|-|*|/|\"|?|¿|!|¡|@|%|#|&|°|´|\^|`|~|/|\\|_|.|,|;|¬||| ]
 Init = "init"
+TwoPoints = ":"
+PuntoYcoma = ";"
+Coma = ","
+LlaveAbre = "{"
+LlaveCierra = "}"
+
 
 Comentario = {Mult}{Guion} {Caracter}* {Guion}{Mult}
 WhiteSpace = {LineTerminator} | {Identation}
@@ -62,13 +69,14 @@ IntegerConstant = {Digit}+
 /* keywords */
 
 <YYINITIAL> {
+  /*Types*/
+  {Int}                                     { return symbol(ParserSym.INT); }
+  {Char}                                    { return symbol(ParserSym.CHAR); }
+  {Float}                                   { System.out.println("Float"); return symbol(ParserSym.FLOAT); }
+  {String}                                  { return symbol(ParserSym.STRING); }
 
   /* reserved words */
-      /*Types*/
-      {Int}                                     { return symbol(ParserSym.INT); }
-      {Char}                                    { return symbol(ParserSym.CHAR); }
-      {Float}                                   { return symbol(ParserSym.FLOAT); }
-  {Init}                                    { return symbol(ParserSym.INIT); }
+  {Init}                                    { System.out.println("Init");return symbol(ParserSym.INIT); }
 
   /* identifiers */
   {Identifier}                             { System.out.println("Identifier: "+ yytext());
@@ -87,11 +95,16 @@ IntegerConstant = {Digit}+
   {Sub}                                     { return symbol(ParserSym.SUB); }
   {Mult}                                    { return symbol(ParserSym.MULT); }
   {Div}                                     { return symbol(ParserSym.DIV); }
-  {Backslash}                               { return symbol(ParserSym.BACKSLASH); }
+
+  /* simbols */
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
   {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
   {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
-
+  {TwoPoints}                               { System.out.println("dos puntos"); return symbol(ParserSym.TWOPOINTS); }
+  {PuntoYcoma}                              { return symbol(ParserSym.P_COMA); }
+  {Coma}                                    { System.out.println("coma"); return symbol(ParserSym.COMA); }
+  {LlaveAbre}                               { return symbol(ParserSym.LLAVEABRE); }
+  {LlaveCierra}                             { System.out.println("}");return symbol(ParserSym.LLAVECIERRA); }
 
   /* whitespace */
   {WhiteSpace}                               { /* ignore */ }

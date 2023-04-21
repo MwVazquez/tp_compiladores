@@ -1,3 +1,9 @@
-*- Esto es un "comentario" -*
+*-This is a commen-*
+
+init {
+
+    a1, b1 : Float
+    variable1 : Int
+    p1, p2, p3 : String
+}
 a = 5
-c = d*(e- 21)/4
