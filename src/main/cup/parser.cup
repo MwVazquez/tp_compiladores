@@ -34,6 +34,8 @@ terminal MENOR;
 terminal MENOR_IGUAL;
 terminal DISTINTO;
 terminal IGUAL;
+terminal IF;
+terminal ELSE;
 
 
 
@@ -82,6 +84,9 @@ sentence ::= assignment  {: System.out.println("End Assignment"); :}
            | ciclo {: System.out.println("End ciclo"); :}
            | si {: System.out.println("End if"); :};
 ciclo ::=  CICLO OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("Ciclo"); :};
+
+si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("seleccion ---> IF "); :}
+          | IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA ELSE LLAVEABRE bloque LLAVECIERRA {: System.out.println("seleccion ---> IF ELSE bloque"); :};
 
 condicion_mul ::= condicion AND condicion {: System.out.println("condicion_mul ---> condicion AND condicion "); :}
                                  | condicion OR condicion {: System.out.println("condicion_mul ---> condicion OR condicion "); :}

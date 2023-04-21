@@ -64,6 +64,8 @@ Menor = "<"
 MenorIgual = "<="
 Igual = "=="
 Distinto = "<>"
+If = "if"
+Else = "else"
 
 Ciclo = "ciclo"
 
@@ -89,7 +91,8 @@ IntegerConstant = {Digit}+
   /* reserved words */
   {Init}                                    { System.out.println("Init");return symbol(ParserSym.INIT); }
   {Ciclo}                                   { System.out.println("Ciclo");return symbol(ParserSym.CICLO); }
-
+  {If}                                      { return symbol(ParserSym.IF); }
+  {Else}                                    { return symbol(ParserSym.ELSE); }
 
   /* Constants */
   {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
