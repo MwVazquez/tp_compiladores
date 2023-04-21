@@ -4,17 +4,24 @@ import java_cup.runtime.*;
 
 class Parser;
 
-
 // Terminals
 terminal ASSIG;
 terminal PLUS;
 terminal SUB;
 terminal MULT;
 terminal DIV;
+terminal BACKSLASH;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal INTEGER_CONSTANT;
 terminal IDENTIFIER;
+terminal INT;
+terminal CHAR;
+terminal FLOAT;
+terminal INIT;
+
+
+
 
 // Non Terminals
 non terminal sentence;
@@ -22,12 +29,28 @@ non terminal assignment;
 non terminal expression;
 non terminal term;
 non terminal factor;
+non terminal programa;
+
+
+non terminal starting;
+non terminal bloque_declaraciones;
+non terminal declaraciones;
+
+
+
 
 // Start Symbol Definition
-start with sentence;
+start with starting;
+starting ::=  bloque_declaraciones  {: System.out.println("inicio --->  bloque_declaraciones programa"); :};
+//                    | programa {: System.out.println("inicio ---> programa \n"); :};
+bloque_declaraciones ::= sentence {: System.out.println("bloque_declaraciones ---> declaraciones\n"); :}
+                     | bloque_declaraciones sentence {: System.out.println("bloque_declaraciones ---> bloque_declaraciones declaraciones\n"); :};
 
-sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
+sentence ::= assignment  {: System.out.println("End"); :};
+assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};
+datatype2 ::= INT  {: System.out.println("Int"); :};
+datatype2 ::= FLOAT  {: System.out.println("Float"); :};
+datatype2 ::= CHAR  {: System.out.println("Char"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
