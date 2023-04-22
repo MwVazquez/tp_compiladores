@@ -35,5 +35,7 @@ if (a > b || c > b)
 }
 if (not a > b)
 {
-    a = a + 1+3
+    write(var1)
+    write("a es mas grande que b")
+    write(“ewr”)
 }

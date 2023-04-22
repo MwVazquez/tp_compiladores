@@ -36,6 +36,8 @@ terminal DISTINTO;
 terminal IGUAL;
 terminal IF;
 terminal ELSE;
+terminal WRITE;
+terminal CTE_CADENA;
 
 
 
@@ -60,6 +62,7 @@ non terminal ciclo;
 non terminal si;
 non terminal condicion_mul;
 non terminal condicion;
+non terminal funcion;
 
 
 
@@ -73,16 +76,17 @@ bloque_declaraciones ::= declaraciones {: System.out.println("bloque_declaracion
                          bloque_declaraciones declaraciones {: System.out.println("bloque_declaraciones ---> bloque_declaraciones declaraciones"); :};
 declaraciones::= lista_de_variables TWOPOINTS tipodato  {: System.out.println("declaraciones ---> lista_de_variables DECLARACION tipodato P_COMA"); :};
 
-lista_de_variables::= IDENTIFIER  {: System.out.println("lista_de_variables ---> ID\n"); :} |
+lista_de_variables::= IDENTIFIER  {: System.out.println("lista_de_variables ---> ID"); :} |
                       lista_de_variables COMA IDENTIFIER  {: System.out.println("lista_de_variables ---> lista_de_variables COMA ID"); :};
 
 tipodato ::= CHAR|INT|FLOAT|STRING {: System.out.println("Tipo de dato"); :};
 
-bloque ::= sentence {: System.out.println("bloque ---> sentencia \n"); :}
-                     |bloque sentence {: System.out.println("bloque ---> bloque sentencia\n"); :};
+bloque ::= sentence {: System.out.println("bloque ---> sentencia "); :}
+                     |bloque sentence {: System.out.println("bloque ---> bloque sentencia"); :};
 sentence ::= assignment  {: System.out.println("End Assignment"); :}
            | ciclo {: System.out.println("End ciclo"); :}
-           | si {: System.out.println("End if"); :};
+           | si {: System.out.println("End if"); :}
+           | funcion {: System.out.println("End funcion"); :};
 ciclo ::=  CICLO OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("Ciclo"); :};
 
 si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("seleccion ---> IF "); :}
@@ -97,10 +101,10 @@ condicion ::= expression MAYOR expression {: System.out.println("condicion ---> 
           |expression MENOR expression {: System.out.println("condicion ---> expresion MENOR expresion "); :}
           |expression MAYOR_IGUAL expression {: System.out.println("condicion ---> expresion MAYOR_IGUAL expresion "); :}
           |expression MENOR_IGUAL expression {: System.out.println("condicion ---> expresion MENOR_IGUAL expresion "); :}
-          |expression IGUAL expression {: System.out.println("condicion ---> expresion IGUAL expresion \n"); :}
-          |expression DISTINTO expression {: System.out.println("expresion DISTINTO expresion\n"); :};
+          |expression IGUAL expression {: System.out.println("condicion ---> expresion IGUAL expresion "); :}
+          |expression DISTINTO expression {: System.out.println("expresion DISTINTO expresion"); :};
 
-
+funcion ::= WRITE OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion WRITE"); :};
 
 assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};
 //datatype2 ::= INT  {: System.out.println("Int"); :};
@@ -114,4 +118,5 @@ term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
+factor ::= CTE_CADENA:constant {: System.out.println("Constant String: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};

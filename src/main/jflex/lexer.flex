@@ -49,6 +49,8 @@ Letter = [a-zA-Z]
 Digit = [0-9]
 Guion = "-"
 Caracter = [a-z|A-Z|0-9|=|>|<|!|:|+|-|*|/|\"|?|¿|!|¡|@|%|#|&|°|´|\^|`|~|/|\\|_|.|,|;|¬||| ]
+CteCadena1 = \"([^\"\\]|\\.)*\"
+CteCadena2 = \“([^\"\\]|\\.)*\”
 Init = "init"
 TwoPoints = ":"
 PuntoYcoma = ";"
@@ -66,10 +68,11 @@ Igual = "=="
 Distinto = "<>"
 If = "if"
 Else = "else"
-
 Ciclo = "ciclo"
 
+Write = "write"
 
+CteCadena = {CteCadena1} | {CteCadena2}
 Comentario = {Mult}{Guion} {Caracter}* {Guion}{Mult}
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
@@ -93,11 +96,13 @@ IntegerConstant = {Digit}+
   {Ciclo}                                   { System.out.println("Ciclo");return symbol(ParserSym.CICLO); }
   {If}                                      { return symbol(ParserSym.IF); }
   {Else}                                    { return symbol(ParserSym.ELSE); }
+  {Write}                                   { return symbol(ParserSym.WRITE); }
 
   /* Constants */
-  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+  {CteCadena}                               { return symbol(ParserSym.CTE_CADENA, yytext()); }
+  {IntegerConstant}                         { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
   /* Comments */
-  {Comentario}                             { System.out.println("Comentario");/* ignore */ }
+  {Comentario}                              { System.out.println("Comentario");/* ignore */ }
 
 
 
