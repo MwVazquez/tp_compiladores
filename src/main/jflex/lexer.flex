@@ -6,6 +6,36 @@ import lyc.compiler.model.*;
 import static lyc.compiler.constants.Constants.*;
 
 %%
+%{
+    private static final int MAX_CADENA = 40;
+    private static final int MAX_INT = 32767;
+    private static final int MIN_INT = -32768;
+
+    public int validarCteCadena(String cadena) throws InvalidLengthException {
+        System.out.println("validarCteCadena: " + cadena.length() + ": " + cadena);
+
+      if(cadena.length() > MAX_CADENA)
+        throw new InvalidLengthException(cadena + ": es demasiado larga");
+      return 1;
+    }
+
+     public int validarCteInteger(String cadena) throws InvalidIntegerException{
+        System.out.println("validarInteger: " + cadena.length() + ": " + cadena);
+        int number;
+        try{
+            number = Integer.parseInt(cadena);
+           }
+        catch (NumberFormatException ex){
+                throw new InvalidIntegerException ("el valor es mayor a :" + MAX_INT );
+            }
+        if(number < MIN_INT || number > MAX_INT)
+            throw new InvalidIntegerException ("el valor es mayor a :" + MAX_INT );
+        return 1 ;
+     }
+
+
+
+%}
 
 %public
 %class Lexer
@@ -13,7 +43,7 @@ import static lyc.compiler.constants.Constants.*;
 %cup
 %line
 %column
-%throws CompilerException
+%throws CompilerException , InvalidLengthException
 %eofval{
   return symbol(ParserSym.EOF);
 %eofval}
@@ -50,7 +80,7 @@ Digit = [0-9]
 Guion = "-"
 Caracter = [a-z|A-Z|0-9|=|>|<|!|:|+|-|*|/|\"|?|¿|!|¡|@|%|#|&|°|´|\^|`|~|/|\\|_|.|,|;|¬||| ]
 CteCadena1 = \"([^\"\\]|\\.)*\"
-CteCadena2 = \“([^\"\\]|\\.)*\”
+CteCadena2 = \“([^\“\\]|\\.)*\”
 Init = "init"
 TwoPoints = ":"
 PuntoYcoma = ";"
@@ -71,16 +101,18 @@ Else = "else"
 Ciclo = "ciclo"
 
 Write = "write"
+Read = "read"
+EstaContenido = "EstaContenido"
 
 CteCadena = {CteCadena1} | {CteCadena2}
 Comentario = {Mult}{Guion} {Caracter}* {Guion}{Mult}
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
+FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
 
 
 %%
-
 
 /* keywords */
 
@@ -92,17 +124,12 @@ IntegerConstant = {Digit}+
   {String}                                  { return symbol(ParserSym.STRING); }
 
   /* reserved words */
-  {Init}                                    { System.out.println("Init");return symbol(ParserSym.INIT); }
-  {Ciclo}                                   { System.out.println("Ciclo");return symbol(ParserSym.CICLO); }
+  {Init}                                    { return symbol(ParserSym.INIT); }
+  {Ciclo}                                   { return symbol(ParserSym.CICLO); }
   {If}                                      { return symbol(ParserSym.IF); }
   {Else}                                    { return symbol(ParserSym.ELSE); }
   {Write}                                   { return symbol(ParserSym.WRITE); }
-
-  /* Constants */
-  {CteCadena}                               { return symbol(ParserSym.CTE_CADENA, yytext()); }
-  {IntegerConstant}                         { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
-  /* Comments */
-  {Comentario}                              { System.out.println("Comentario");/* ignore */ }
+  {Read}                                    { return symbol(ParserSym.READ); }
 
 
 
@@ -124,12 +151,12 @@ IntegerConstant = {Digit}+
   {Igual}                                  { return symbol(ParserSym.IGUAL); }
   {Distinto}                               { return symbol(ParserSym.DISTINTO); }
 
-
-
-
-
-
-
+/* Constants */
+   {CteCadena}                               { System.out.println("CTE cadena");validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
+   {IntegerConstant}                         { validarCteInteger(yytext());return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+   {FloatConstant}                           { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
+    /* Comments */
+   {Comentario}                              { System.out.println("Comentario");/* ignore */ }
 
   /* simbols */
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
@@ -139,10 +166,10 @@ IntegerConstant = {Digit}+
   {PuntoYcoma}                              { return symbol(ParserSym.P_COMA); }
   {Coma}                                    { System.out.println("coma"); return symbol(ParserSym.COMA); }
   {LlaveAbre}                               { return symbol(ParserSym.LLAVEABRE); }
-  {LlaveCierra}                             { System.out.println("}");return symbol(ParserSym.LLAVECIERRA); }
+  {LlaveCierra}                             { return symbol(ParserSym.LLAVECIERRA); }
 
   /* identifiers */
-    {Identifier}                             { System.out.println("Identifier: "+ yytext());
+    {Identifier}                             {  System.out.println("ID");validarCteCadena(yytext());
                                               return symbol(ParserSym.IDENTIFIER, yytext()); }
 
   /* whitespace */
@@ -151,4 +178,4 @@ IntegerConstant = {Digit}+
 
 
 /* error fallback */
-[^]                              { throw new UnknownCharacterException(yytext() + yyline); }
+[^]                              { throw new UnknownCharacterException(yytext()); }

@@ -13,6 +13,7 @@ terminal DIV;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal INTEGER_CONSTANT;
+terminal FLOAT_CONSTANT;
 terminal IDENTIFIER;
 terminal INT;
 terminal CHAR;
@@ -38,6 +39,7 @@ terminal IF;
 terminal ELSE;
 terminal WRITE;
 terminal CTE_CADENA;
+terminal READ;
 
 
 
@@ -50,6 +52,7 @@ non terminal expression;
 non terminal term;
 non terminal factor;
 non terminal programa;
+
 
 
 non terminal starting;
@@ -70,29 +73,34 @@ non terminal funcion;
 
 // Start Symbol Definition
 start with starting;
-starting ::= INIT LLAVEABRE bloque_declaraciones LLAVECIERRA bloque {: System.out.println("starting --->  bloque_declaraciones programa"); :}
-             | bloque {: System.out.println("inicio ---> programa"); :};
-bloque_declaraciones ::= declaraciones {: System.out.println("bloque_declaraciones ---> declaraciones"); :} |
-                         bloque_declaraciones declaraciones {: System.out.println("bloque_declaraciones ---> bloque_declaraciones declaraciones"); :};
-declaraciones::= lista_de_variables TWOPOINTS tipodato  {: System.out.println("declaraciones ---> lista_de_variables DECLARACION tipodato P_COMA"); :};
+starting ::= INIT LLAVEABRE bloque_declaraciones LLAVECIERRA  {: System.out.println("starting -> INIT { bloque_declaraciones } "); :}
+             | INIT LLAVEABRE bloque_declaraciones LLAVECIERRA bloque {: System.out.println("starting -> INIT { bloque_declaraciones } bloque"); :}
+             | bloque {: System.out.println("starting -> bloque"); :};
 
-lista_de_variables::= IDENTIFIER  {: System.out.println("lista_de_variables ---> ID"); :} |
-                      lista_de_variables COMA IDENTIFIER  {: System.out.println("lista_de_variables ---> lista_de_variables COMA ID"); :};
+bloque_declaraciones ::= declaraciones {: System.out.println("bloq_decla -> decla"); :} |
+                         bloque_declaraciones declaraciones {: System.out.println("bloq_decla -> bloq_decla decla"); :};
+declaraciones::= lista_de_variables TWOPOINTS tipodato  {: System.out.println("declar ---> lista_de_variables TWOPOINTS tipodato "); :};
 
-tipodato ::= CHAR|INT|FLOAT|STRING {: System.out.println("Tipo de dato"); :};
+lista_de_variables::= IDENTIFIER  {: System.out.println("lista_de_variables -> ID"); :} |
+                      lista_de_variables COMA IDENTIFIER  {: System.out.println("list var -> list var , ID"); :};
 
-bloque ::= sentence {: System.out.println("bloque ---> sentencia "); :}
-                     |bloque sentence {: System.out.println("bloque ---> bloque sentencia"); :};
+tipodato ::= CHAR|INT|FLOAT|STRING {: System.out.println("Tipo de dato -> C|I|F|S"); :};
+
+bloque ::= sentence {: System.out.println("\tbloque ---> sentencia "); :}
+                     |bloque sentence {: System.out.println("\t\tbloque ---> bloque sentencia"); :};
 sentence ::= assignment  {: System.out.println("End Assignment"); :}
-           | ciclo {: System.out.println("End ciclo"); :}
-           | si {: System.out.println("End if"); :}
-           | funcion {: System.out.println("End funcion"); :};
-ciclo ::=  CICLO OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("Ciclo"); :};
+           | ciclo {: System.out.println("sentence -> ciclo"); :}
+           | si {: System.out.println("sentence -> if"); :}
+           | funcion {: System.out.println("sentence -> funcion"); :};
 
-si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("seleccion ---> IF "); :}
-          | IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA ELSE LLAVEABRE bloque LLAVECIERRA {: System.out.println("seleccion ---> IF ELSE bloque"); :};
+ciclo ::=  CICLO OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA
+            {: System.out.println("Ciclo -> CICLO ( condicion_mul ) { bloque } "); :};
 
-condicion_mul ::= condicion AND condicion {: System.out.println("condicion_mul ---> condicion AND condicion "); :}
+si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("if sin else "); :}
+        | IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA ELSE LLAVEABRE bloque LLAVECIERRA
+        {: System.out.println(" if con else"); :};
+
+condicion_mul ::= condicion AND condicion {: System.out.println("condic_mul ---> condicion AND condicion "); :}
                                  | condicion OR condicion {: System.out.println("condicion_mul ---> condicion OR condicion "); :}
                                  | NOT condicion {: System.out.println("condicion_mul ---> NOT condicion "); :}
                                  | condicion {: System.out.println("condicion_mul ---> condicion "); :};
@@ -104,12 +112,10 @@ condicion ::= expression MAYOR expression {: System.out.println("condicion ---> 
           |expression IGUAL expression {: System.out.println("condicion ---> expresion IGUAL expresion "); :}
           |expression DISTINTO expression {: System.out.println("expresion DISTINTO expresion"); :};
 
-funcion ::= WRITE OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion WRITE"); :};
+funcion ::= WRITE OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion WRITE"); :}
+            | READ OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion READ"); :};
 
 assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};
-//datatype2 ::= INT  {: System.out.println("Int"); :};
-//datatype2 ::= FLOAT  {: System.out.println("Float"); :};
-//datatype2 ::= CHAR  {: System.out.println("Char"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
@@ -117,6 +123,8 @@ term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant Integer: " + constant ); :};
+factor ::= SUB INTEGER_CONSTANT:constant {: System.out.println("Constant Integer: " + constant ); :};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant Float: " + constant ); :};
 factor ::= CTE_CADENA:constant {: System.out.println("Constant String: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};

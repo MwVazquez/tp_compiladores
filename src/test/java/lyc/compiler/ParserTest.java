@@ -32,15 +32,25 @@ public class ParserTest {
     void assignments() throws Exception {
         compilationSuccessful(readFromFile("assignments.txt"));
     }
-
+    /*
     @Test
     void write() throws Exception {
         compilationSuccessful(readFromFile("write.txt"));
     }
-
+    */
+    @Test
+    void write2() throws Exception {
+        compilationSuccessful("write(\"a es mas grande que b\")");
+    }
+    /*
     @Test
     void read() throws Exception {
         compilationSuccessful(readFromFile("read.txt"));
+    }
+    */
+    @Test
+    public void read2() throws Exception {
+        compilationSuccessful("read(base)");
     }
 
     @Test
