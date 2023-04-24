@@ -40,6 +40,7 @@ terminal ELSE;
 terminal WRITE;
 terminal CTE_CADENA;
 terminal READ;
+terminal ESTACONTENIDO;
 
 
 
@@ -110,10 +111,12 @@ condicion ::= expression MAYOR expression {: System.out.println("condicion ---> 
           |expression MAYOR_IGUAL expression {: System.out.println("condicion ---> expresion MAYOR_IGUAL expresion "); :}
           |expression MENOR_IGUAL expression {: System.out.println("condicion ---> expresion MENOR_IGUAL expresion "); :}
           |expression IGUAL expression {: System.out.println("condicion ---> expresion IGUAL expresion "); :}
-          |expression DISTINTO expression {: System.out.println("expresion DISTINTO expresion"); :};
+          |expression DISTINTO expression {: System.out.println("expresion DISTINTO expresion"); :}
+          |funcion ;
 
 funcion ::= WRITE OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion WRITE"); :}
-            | READ OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion READ"); :};
+            | READ OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion READ"); :}
+            | ESTACONTENIDO OPEN_BRACKET expression COMA expression CLOSE_BRACKET;
 
 assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};

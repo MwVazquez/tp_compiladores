@@ -18,6 +18,25 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Disabled
 public class ParserTest {
 
+    // Agregadas
+    @Test
+    public void EstaContenido() throws Exception {
+        compilationSuccessful("EstaContenido(\"Homplato\", \"plato\")");
+    }
+    @Test
+    public void ifEstaContenido() throws Exception {
+        compilationSuccessful("if(EstaContenido(\"Homplato\", \"plato\")){ a=h}");
+    }
+    @Test
+    public void cicloEstaContenido() throws Exception {
+        compilationSuccessful("ciclo (EstaContenido(\"Homplato\", \"plato\") ) {a = a + 1}");
+    }
+    @Test
+    public void cicloEstaContenidoYcondicion() throws Exception {
+        compilationSuccessful("ciclo (EstaContenido(\"Homplato\", \"plato\") || a<b) {a = a + 1}");
+    }
+    //
+
     @Test
     public void assignmentWithExpression() throws Exception {
         compilationSuccessful("c=d*(e-21)/4");

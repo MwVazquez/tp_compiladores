@@ -130,6 +130,7 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {Else}                                    { return symbol(ParserSym.ELSE); }
   {Write}                                   { return symbol(ParserSym.WRITE); }
   {Read}                                    { return symbol(ParserSym.READ); }
+  {EstaContenido}                           { return symbol(ParserSym.ESTACONTENIDO); }
 
 
 

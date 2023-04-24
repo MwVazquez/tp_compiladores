@@ -2,3 +2,16 @@
 a = 123
 
 c=d*(e-21)/4
+EstaContenido("Homplato", "plato")
+if(EstaContenido("Homplato", "plato")){
+    a=h
+    }
+if(a > b){
+ q= k
+ }
+
+ ciclo (EstaContenido("Homplato", "plato") || a<b)
+ {
+     write("a es mas grande que b")
+     a = a + 1
+ }
