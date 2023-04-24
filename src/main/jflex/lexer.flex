@@ -3,7 +3,9 @@ package lyc.compiler;
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
 import lyc.compiler.model.*;
+
 import static lyc.compiler.constants.Constants.*;
+import java.util.ArrayList;
 
 %%
 %{
@@ -11,16 +13,16 @@ import static lyc.compiler.constants.Constants.*;
     private static final int MAX_INT = 32767;
     private static final int MIN_INT = -32768;
 
-    public int validarCteCadena(String cadena) throws InvalidLengthException {
-        System.out.println("validarCteCadena: " + cadena.length() + ": " + cadena);
 
-      if(cadena.length() > MAX_CADENA)
-        throw new InvalidLengthException(cadena + ": es demasiado larga");
-      return 1;
+
+    public int validarCteCadena(String cadena) throws InvalidLengthException {
+          if(cadena.length() > MAX_CADENA)
+            throw new InvalidLengthException(cadena + ": es demasiado larga");
+
+          return 1;
     }
 
      public int validarCteInteger(String cadena) throws InvalidIntegerException{
-        System.out.println("validarInteger: " + cadena.length() + ": " + cadena);
         int number;
         try{
             number = Integer.parseInt(cadena);
@@ -32,6 +34,7 @@ import static lyc.compiler.constants.Constants.*;
             throw new InvalidIntegerException ("el valor es mayor a :" + MAX_INT );
         return 1 ;
      }
+
 
 
 
@@ -120,7 +123,7 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   /*Types*/
   {Int}                                     { return symbol(ParserSym.INT); }
   {Char}                                    { return symbol(ParserSym.CHAR); }
-  {Float}                                   { System.out.println("Float"); return symbol(ParserSym.FLOAT); }
+  {Float}                                   { return symbol(ParserSym.FLOAT); }
   {String}                                  { return symbol(ParserSym.STRING); }
 
   /* reserved words */
@@ -153,7 +156,7 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {Distinto}                               { return symbol(ParserSym.DISTINTO); }
 
 /* Constants */
-   {CteCadena}                               { System.out.println("CTE cadena");validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
+   {CteCadena}                               { validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
    {IntegerConstant}                         { validarCteInteger(yytext());return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
    {FloatConstant}                           { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
     /* Comments */
@@ -163,14 +166,14 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
   {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
   {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
-  {TwoPoints}                               { System.out.println("dos puntos"); return symbol(ParserSym.TWOPOINTS); }
+  {TwoPoints}                               { return symbol(ParserSym.TWOPOINTS); }
   {PuntoYcoma}                              { return symbol(ParserSym.P_COMA); }
-  {Coma}                                    { System.out.println("coma"); return symbol(ParserSym.COMA); }
+  {Coma}                                    { return symbol(ParserSym.COMA); }
   {LlaveAbre}                               { return symbol(ParserSym.LLAVEABRE); }
   {LlaveCierra}                             { return symbol(ParserSym.LLAVECIERRA); }
 
   /* identifiers */
-    {Identifier}                             {  System.out.println("ID");validarCteCadena(yytext());
+    {Identifier}                             {
                                               return symbol(ParserSym.IDENTIFIER, yytext()); }
 
   /* whitespace */

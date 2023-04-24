@@ -80,12 +80,12 @@ starting ::= INIT LLAVEABRE bloque_declaraciones LLAVECIERRA  {: System.out.prin
 
 bloque_declaraciones ::= declaraciones {: System.out.println("bloq_decla -> decla"); :} |
                          bloque_declaraciones declaraciones {: System.out.println("bloq_decla -> bloq_decla decla"); :};
-declaraciones::= lista_de_variables TWOPOINTS tipodato  {: System.out.println("declar ---> lista_de_variables TWOPOINTS tipodato "); :};
+declaraciones::= lista_de_variables TWOPOINTS tipodato  {: System.out.println("declar ---> lista_de_variables : tipodato "); :};
 
 lista_de_variables::= IDENTIFIER  {: System.out.println("lista_de_variables -> ID"); :} |
                       lista_de_variables COMA IDENTIFIER  {: System.out.println("list var -> list var , ID"); :};
 
-tipodato ::= CHAR|INT|FLOAT|STRING {: System.out.println("Tipo de dato -> C|I|F|S"); :};
+tipodato ::= CHAR|INT|FLOAT|STRING {: System.out.println("Tipo de dato -> I|F|S"); :};
 
 bloque ::= sentence {: System.out.println("\tbloque ---> sentencia "); :}
                      |bloque sentence {: System.out.println("\t\tbloque ---> bloque sentencia"); :};
@@ -95,28 +95,28 @@ sentence ::= assignment  {: System.out.println("End Assignment"); :}
            | funcion {: System.out.println("sentence -> funcion"); :};
 
 ciclo ::=  CICLO OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA
-            {: System.out.println("Ciclo -> CICLO ( condicion_mul ) { bloque } "); :};
+            {: System.out.println("ciclo -> CICLO ( condicion_mul ) { bloque } "); :};
 
 si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("if sin else "); :}
         | IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA ELSE LLAVEABRE bloque LLAVECIERRA
         {: System.out.println(" if con else"); :};
 
-condicion_mul ::= condicion AND condicion {: System.out.println("condic_mul ---> condicion AND condicion "); :}
-                                 | condicion OR condicion {: System.out.println("condicion_mul ---> condicion OR condicion "); :}
-                                 | NOT condicion {: System.out.println("condicion_mul ---> NOT condicion "); :}
-                                 | condicion {: System.out.println("condicion_mul ---> condicion "); :};
+condicion_mul ::= condicion AND condicion {: System.out.println("condic_mul -> condicion AND condicion "); :}
+                                 | condicion OR condicion {: System.out.println("condicion_mul -> condicion OR condicion "); :}
+                                 | NOT condicion {: System.out.println("condicion_mul -> NOT condicion "); :}
+                                 | condicion {: System.out.println("condicion_mul -> condicion "); :};
 
-condicion ::= expression MAYOR expression {: System.out.println("condicion ---> expresion MAYOR expresion "); :}
-          |expression MENOR expression {: System.out.println("condicion ---> expresion MENOR expresion "); :}
-          |expression MAYOR_IGUAL expression {: System.out.println("condicion ---> expresion MAYOR_IGUAL expresion "); :}
-          |expression MENOR_IGUAL expression {: System.out.println("condicion ---> expresion MENOR_IGUAL expresion "); :}
-          |expression IGUAL expression {: System.out.println("condicion ---> expresion IGUAL expresion "); :}
-          |expression DISTINTO expression {: System.out.println("expresion DISTINTO expresion"); :}
+condicion ::= expression MAYOR expression {: System.out.println("condicion -> expresion MAYOR expresion "); :}
+          |expression MENOR expression {: System.out.println("condicion -> expresion MENOR expresion "); :}
+          |expression MAYOR_IGUAL expression {: System.out.println("condicion -> expresion MAYOR_IGUAL expresion "); :}
+          |expression MENOR_IGUAL expression {: System.out.println("condicion -> expresion MENOR_IGUAL expresion "); :}
+          |expression IGUAL expression {: System.out.println("condicion -> expresion IGUAL expresion "); :}
+          |expression DISTINTO expression {: System.out.println("condicion -> expresion DISTINTO expresion"); :}
           |funcion ;
 
 funcion ::= WRITE OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion WRITE"); :}
             | READ OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("funcion READ"); :}
-            | ESTACONTENIDO OPEN_BRACKET expression COMA expression CLOSE_BRACKET;
+            | ESTACONTENIDO OPEN_BRACKET expression COMA expression CLOSE_BRACKET {: System.out.println("Esta contenido"); :};
 
 assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
