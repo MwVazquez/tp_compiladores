@@ -1,21 +1,5 @@
-init {
-    a1, b1 : Float
-    variable1 : Int
-    p1, p2, p3 : String
-}
-a = 123
-
-c=d*(e-21)/4
-EstaContenido("Homplato", "plato")
-if(EstaContenido("Homplato", "plato")){
-    a=h
-    }
-if(a > b){
- q= k
- }
-
- ciclo (EstaContenido("Homplato", "plato") || a<b)
- {
-     write("a es mas grande que b")
-     a = a + 1
- }
+if(a<b) {
+        a=n
+	} else { a=8 }
+		
+        

@@ -3,6 +3,9 @@ package lyc.compiler;
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
 import lyc.compiler.model.*;
+import lyc.compiler.tablaSimbolos.TablaSimbolos;
+import lyc.compiler.tablaSimbolos.Simbolo;
+
 
 import static lyc.compiler.constants.Constants.*;
 import java.util.ArrayList;
@@ -136,7 +139,12 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {EstaContenido}                           { return symbol(ParserSym.ESTACONTENIDO); }
 
 
-
+/* Constants */
+   {CteCadena}                               { validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
+   {IntegerConstant}                         { validarCteInteger(yytext());return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+   {FloatConstant}                           { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
+    /* Comments */
+   {Comentario}                              { System.out.println("Comentario");/* ignore */ }
 
 
   /* operators */
@@ -155,12 +163,7 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {Igual}                                  { return symbol(ParserSym.IGUAL); }
   {Distinto}                               { return symbol(ParserSym.DISTINTO); }
 
-/* Constants */
-   {CteCadena}                               { validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
-   {IntegerConstant}                         { validarCteInteger(yytext());return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
-   {FloatConstant}                           { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
-    /* Comments */
-   {Comentario}                              { System.out.println("Comentario");/* ignore */ }
+
 
   /* simbols */
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
@@ -173,8 +176,14 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {LlaveCierra}                             { return symbol(ParserSym.LLAVECIERRA); }
 
   /* identifiers */
-    {Identifier}                             {
-                                              return symbol(ParserSym.IDENTIFIER, yytext()); }
+    {Identifier}                             { Simbolo s = new Simbolo(yytext(), 0);
+                                                TablaSimbolos.t.put(yytext(), s);
+                                                System.out.println(TablaSimbolos.t.get(yytext()).getNombre() +"....");
+                                               // TablaSimbolos.t.get(yytext());
+
+                                                //TablaSimbolos.t.insertar(yytext());
+                                                //System.out.println(TablaSimbolos.t.);
+                                                return symbol(ParserSym.IDENTIFIER, yytext()); }
 
   /* whitespace */
   {WhiteSpace}                               { /* ignore */ }

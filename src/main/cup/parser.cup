@@ -2,6 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.*;
 
+
 class Parser;
 
 // Terminals
@@ -41,9 +42,7 @@ terminal WRITE;
 terminal CTE_CADENA;
 terminal READ;
 terminal ESTACONTENIDO;
-
-
-
+terminal MENOS_UNARIO;
 
 
 // Non Terminals
@@ -67,6 +66,8 @@ non terminal si;
 non terminal condicion_mul;
 non terminal condicion;
 non terminal funcion;
+
+precedence left MENOS_UNARIO;
 
 
 
@@ -103,7 +104,7 @@ si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA 
 
 condicion_mul ::= condicion AND condicion {: System.out.println("condic_mul -> condicion AND condicion "); :}
                                  | condicion OR condicion {: System.out.println("condicion_mul -> condicion OR condicion "); :}
-                                 | NOT condicion {: System.out.println("condicion_mul -> NOT condicion "); :}
+                                 | NOT OPEN_BRACKET condicion CLOSE_BRACKET{: System.out.println("condicion_mul -> NOT condicion "); :}
                                  | condicion {: System.out.println("condicion_mul -> condicion "); :};
 
 condicion ::= expression MAYOR expression {: System.out.println("condicion -> expresion MAYOR expresion "); :}
@@ -119,15 +120,16 @@ funcion ::= WRITE OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("f
             | ESTACONTENIDO OPEN_BRACKET expression COMA expression CLOSE_BRACKET {: System.out.println("Esta contenido"); :};
 
 assignment ::= IDENTIFIER  ASSIG expression {: System.out.println("Assignment"); :};
+assignment ::= IDENTIFIER  ASSIG SUB expression {: System.out.println("Assignment menos"); :}%prec MENOS_UNARIO;
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
+
 term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant Integer: " + constant ); :};
-factor ::= SUB INTEGER_CONSTANT:constant {: System.out.println("Constant Integer: " + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant Float: " + constant ); :};
 factor ::= CTE_CADENA:constant {: System.out.println("Constant String: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};

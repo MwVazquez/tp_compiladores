@@ -56,7 +56,7 @@ public class LexerTest {
       nextToken();
     });
   }
-/*
+
   @Test
   public void invalidNegativeIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
@@ -66,7 +66,7 @@ public class LexerTest {
     });
   }
 
-*/
+
 
   @Test
   public void assignmentWithExpressions() throws Exception {
