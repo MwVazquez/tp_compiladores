@@ -1,19 +1,22 @@
 package lyc.compiler.tablaSimbolos;
 import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+
+
+
 public class TablaSimbolos {
-    public static Map<String, Simbolo> t;
+    private Map<String, Simbolo> t;
     public TablaSimbolos(){
         System.out.println("Se creo la tabla de simbolos");
-        t = new HashMap<>();
+        t = new HashMap<String, Simbolo>();
     }
-    // ver como incluir el metodo o como implementarlo desde lexer.flex
-    public Simbolo insertar(String nombre){
+    public void insertar(Simbolo simbolo){
         System.out.println("Se inserta en tabla");
-        Simbolo s = new Simbolo(nombre, 0);
-        t.put(nombre, s);
-        return s;
+        t.put(simbolo.getNombre(), simbolo);
     }
-    public static Simbolo buscar(String nombre){
+    public  Simbolo buscar(String nombre){
         return (t.get(nombre));
     }
     public void imprimir(){
@@ -21,6 +24,35 @@ public class TablaSimbolos {
         while(it.hasNext()){
             Simbolo s = (Simbolo)it.next();
             System.out.println(s.nombre + ": "+ s.valor);
+        }
+    }
+    public void escribir(){
+
+        try {
+            String ruta = "./Tabla_de_simbolos.txt";
+            File file = new File(ruta);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(String.format("%-40s", "Nombre")+"|" + String.format("%-40s", "Tipo")+"|" +
+                    String.format("%-40s", "Valor")+ "|" + String.format("%-10s", "Longitud")+"\n");
+            bw.write(String.format("%-130s", "-").replace(' ','-')+"\n");
+
+
+            Iterator it = t.values().iterator();
+            while(it.hasNext()){
+                Simbolo s = (Simbolo)it.next();
+                bw.write(String.format("%-40s", s.getNombre()) + "|" + String.format("%-40s",s.getTipoDato()) +
+                        "|" + String.format("%-40s",s.getValor() )+ "|" +String.format("%-10s",s.getLongitud() )+"\n");
+                bw.write(String.format("%-130s", "_").replace(' ','_')+"\n");
+
+            }
+            bw.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

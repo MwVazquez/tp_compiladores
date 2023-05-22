@@ -1,9 +1,18 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
+import java.io.*;
+import lyc.compiler.tablaSimbolos.TablaSimbolos;
+
 
 
 class Parser;
+action code{:
+
+        int A=0;
+
+:};
+
 
 // Terminals
 terminal ASSIG;
@@ -66,6 +75,7 @@ non terminal si;
 non terminal condicion_mul;
 non terminal condicion;
 non terminal funcion;
+non terminal vacio;
 
 precedence left MENOS_UNARIO;
 
@@ -77,7 +87,8 @@ precedence left MENOS_UNARIO;
 start with starting;
 starting ::= INIT LLAVEABRE bloque_declaraciones LLAVECIERRA  {: System.out.println("starting -> INIT { bloque_declaraciones } "); :}
              | INIT LLAVEABRE bloque_declaraciones LLAVECIERRA bloque {: System.out.println("starting -> INIT { bloque_declaraciones } bloque"); :}
-             | bloque {: System.out.println("starting -> bloque"); :};
+             | bloque {: System.out.println("starting -> bloque"); :}
+             | vacio {: System.out.println("starting -> vacio"); :};
 
 bloque_declaraciones ::= declaraciones {: System.out.println("bloq_decla -> decla"); :} |
                          bloque_declaraciones declaraciones {: System.out.println("bloq_decla -> bloq_decla decla"); :};
@@ -104,7 +115,7 @@ si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA 
 
 condicion_mul ::= condicion AND condicion {: System.out.println("condic_mul -> condicion AND condicion "); :}
                                  | condicion OR condicion {: System.out.println("condicion_mul -> condicion OR condicion "); :}
-                                 | NOT OPEN_BRACKET condicion CLOSE_BRACKET{: System.out.println("condicion_mul -> NOT condicion "); :}
+                                 | NOT OPEN_BRACKET condicion CLOSE_BRACKET{: System.out.println("condicion_mul -> NOT (condicion) "); :}
                                  | condicion {: System.out.println("condicion_mul -> condicion "); :};
 
 condicion ::= expression MAYOR expression {: System.out.println("condicion -> expresion MAYOR expresion "); :}
@@ -133,3 +144,4 @@ factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant Integer: " 
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant Float: " + constant ); :};
 factor ::= CTE_CADENA:constant {: System.out.println("Constant String: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+vacio ::= {: System.out.println("VACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"); :};

@@ -15,8 +15,9 @@ public final class Compiler {
 
     private Compiler(){}
 
+    static TablaSimbolos tablaSimbolos;
     public static void main(String[] args) {
-        TablaSimbolos tablaSimbolos= new TablaSimbolos();
+
         if (args.length != 1) {
             System.out.println("Filename must be provided as argument.");
             System.exit(0);
@@ -35,8 +36,7 @@ public final class Compiler {
             System.err.println("Compilation error: " + e.getMessage());
             System.exit(0);
         }
-        //
-        // tabla.imprimir();
+
         System.out.println("Compilation Successful");
 
     }

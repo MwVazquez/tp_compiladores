@@ -15,6 +15,7 @@ import java.util.ArrayList;
     private static final int MAX_CADENA = 40;
     private static final int MAX_INT = 32767;
     private static final int MIN_INT = -32768;
+    TablaSimbolos tablaSimbolos= new TablaSimbolos();
 
 
 
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 %column
 %throws CompilerException , InvalidLengthException
 %eofval{
+  tablaSimbolos.escribir();
   return symbol(ParserSym.EOF);
 %eofval}
 
@@ -140,9 +142,12 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
 
 
 /* Constants */
-   {CteCadena}                               { validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
-   {IntegerConstant}                         { validarCteInteger(yytext());return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
-   {FloatConstant}                           { return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
+   {CteCadena}                               { Simbolo s = new Simbolo(yytext(), yytext(),"CTE_String",yylength());
+                                               tablaSimbolos.insertar(s);validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
+   {IntegerConstant}                         { Simbolo s = new Simbolo(yytext(), yytext(),"CTE_Int",yylength());
+                                                tablaSimbolos.insertar(s);validarCteInteger(yytext());return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+   {FloatConstant}                           { Simbolo s = new Simbolo(yytext(), yytext(),"CTE_Float",yylength());
+                                               tablaSimbolos.insertar(s);return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
     /* Comments */
    {Comentario}                              { System.out.println("Comentario");/* ignore */ }
 
@@ -176,14 +181,9 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {LlaveCierra}                             { return symbol(ParserSym.LLAVECIERRA); }
 
   /* identifiers */
-    {Identifier}                             { Simbolo s = new Simbolo(yytext(), 0);
-                                                TablaSimbolos.t.put(yytext(), s);
-                                                System.out.println(TablaSimbolos.t.get(yytext()).getNombre() +"....");
-                                               // TablaSimbolos.t.get(yytext());
-
-                                                //TablaSimbolos.t.insertar(yytext());
-                                                //System.out.println(TablaSimbolos.t.);
-                                                return symbol(ParserSym.IDENTIFIER, yytext()); }
+    {Identifier}                             { Simbolo s = new Simbolo(yytext(), yytext(),"",yylength());
+                                               tablaSimbolos.insertar(s);
+                                               return symbol(ParserSym.IDENTIFIER, yytext()); }
 
   /* whitespace */
   {WhiteSpace}                               { /* ignore */ }

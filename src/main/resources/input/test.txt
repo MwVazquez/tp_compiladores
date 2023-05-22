@@ -1,5 +1,19 @@
-if(a<b) {
-        a=n
-	} else { a=8 }
-		
-        
+if (number > 0) {
+  numberSign = "positivo"
+} else {
+  if (number < 0) {
+    numberSign = "negativo"
+  } else {
+    numberSign = "neutral"
+  }
+}
+
+falla
+if (number > 0) {
+  numberSign = "positivo"
+} else
+  if (number < 0) {
+    numberSign = "negativo"
+  } else {
+    numberSign = "neutral"
+  }
