@@ -43,4 +43,7 @@ public class Simbolo {
     public void setLongitud(int longitud) {
         this.longitud = longitud;
     }
+
+
+
 }

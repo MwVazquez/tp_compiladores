@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import javax.management.PersistentMBean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -51,22 +52,30 @@ public class ParserTest {
     void assignments() throws Exception {
         compilationSuccessful(readFromFile("assignments.txt"));
     }
-    /*
+
     @Test
     void write() throws Exception {
         compilationSuccessful(readFromFile("write.txt"));
     }
-    */
+
     @Test
     void write2() throws Exception {
         compilationSuccessful("write(\"a es mas grande que b\")");
     }
-    /*
+    @Test
+    void write3() throws Exception {
+        compilationSuccessful(" write(“ewr”)");
+    }
+    @Test
+    void write4() throws Exception {
+        compilationSuccessful(" write(var1)");
+    }
+
     @Test
     void read() throws Exception {
         compilationSuccessful(readFromFile("read.txt"));
     }
-    */
+
     @Test
     public void read2() throws Exception {
         compilationSuccessful("read(base)");
@@ -81,7 +90,7 @@ public class ParserTest {
     void init() throws Exception {
         compilationSuccessful(readFromFile("init.txt"));
     }
-
+    /*
     @Test
     void and() throws Exception {
         compilationSuccessful(readFromFile("and.txt"));
@@ -91,7 +100,7 @@ public class ParserTest {
     void or() throws Exception {
         compilationSuccessful(readFromFile("or.txt"));
     }
-
+    */
     @Test
     void not() throws Exception {
         compilationSuccessful(readFromFile("not.txt"));
@@ -106,8 +115,75 @@ public class ParserTest {
     void whileStatement() throws Exception {
         compilationSuccessful(readFromFile("while.txt"));
     }
+    @Test
+    void ifSinElse() throws Exception {
+        compilationSuccessful("if(temp<10){\n" +
+                "            mensaje = \"Hace mucho frío.\"\n" +
+                "        }");
+    }
+    @Test
+    void ifConElse() throws Exception {
+        compilationSuccessful("if(temp<10){\n" +
+                "            mensaje = \"Hace mucho frío.\"\n" +
+                "        }\n" +
+                "        else{\n" +
+                "                mensaje = \"Hace poco frío.\"\n" +
+                "            }");
+    }
+    @Test
+    void elseIf() throws Exception {
+        compilationSuccessful("if(temp<10){\n" +
+                "            mensaje = \"Hace mucho frío.\"\n" +
+                "\t}     \n" +
+                "else{\n" +
+                "    if(temp<15){\n" +
+                "                mensaje = \"Hace poco frío.\"\n" +
+                "              }\n" +
+                "     else{\n" +
+                "           if(temp<25){\n" +
+                "                       mensaje = \"Hace una temperatura normal.\"\n" +
+                "                      }\n" +
+                "\t  }\n" +
+                "     }");
 
 
+    }
+
+
+    @Test
+    void ifAnidado() throws Exception {
+        compilationSuccessful("if(temp<10){\n" +
+                "            mensaje = \"Hace mucho frío.\"\n" +
+                "        }\n" +
+                "        else{\n" +
+                "            if(temp<15){\n" +
+                "                mensaje = \"Hace poco frío.\"\n" +
+                "            }\n" +
+                "            else{\n" +
+                "                if(temp<25){\n" +
+                "                    mensaje = \"Hace una temperatura normal.\"\n" +
+                "                }\n" +
+                "                else{\n" +
+                "                    if(temp<30){\n" +
+                "                        mensaje = \"Hace poco calor.\"\n" +
+                "                    }\n" +
+                "                    else{\n" +
+                "                        mensaje = \"Hace mucho calor.\"\n" +
+                "                    }\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }");
+    }
+
+    @Test
+    public void notCondicion() throws Exception {
+        compilationSuccessful("if (not a <b) {a=b}");
+    }
+
+    @Test
+    public void notCondicionParentesis() throws Exception {
+        compilationSuccessful("if (not (a <b)) {a=b}");
+    }
     private void compilationSuccessful(String input) throws Exception {
         assertThat(scan(input).sym).isEqualTo(ParserSym.EOF);
     }

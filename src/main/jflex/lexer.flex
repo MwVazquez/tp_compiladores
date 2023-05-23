@@ -5,6 +5,7 @@ import lyc.compiler.ParserSym;
 import lyc.compiler.model.*;
 import lyc.compiler.tablaSimbolos.TablaSimbolos;
 import lyc.compiler.tablaSimbolos.Simbolo;
+import java.lang.Float;
 
 
 import static lyc.compiler.constants.Constants.*;
@@ -25,22 +26,34 @@ import java.util.ArrayList;
 
           return 1;
     }
-
-     public int validarCteInteger(String cadena) throws InvalidIntegerException{
-        int number;
+    public int validarCteInteger(String cadena) throws InvalidIntegerException{
+        System.out.println("Validar Integer");
+        int number=0;
         try{
             number = Integer.parseInt(cadena);
            }
         catch (NumberFormatException ex){
-                throw new InvalidIntegerException ("el valor es mayor a :" + MAX_INT );
+               throw new InvalidIntegerException ("el valor " + cadena + " esta fuera de rango [" + MIN_INT + " : " + MAX_INT );
             }
         if(number < MIN_INT || number > MAX_INT)
-            throw new InvalidIntegerException ("el valor es mayor a :" + MAX_INT );
+            throw new InvalidIntegerException ("el valor " + cadena + " esta fuera de rango [" + MIN_INT + " : " + MAX_INT);
         return 1 ;
-     }
+    }
 
-
-
+    public int validarCteFloat(String cadena) throws Exception{
+        System.out.println("Validar Float");
+        float number=0;
+        try{
+            number = Float.parseFloat(cadena);
+             System.out.println(number);
+        }
+        catch (NumberFormatException ex){
+             System.out.println("Error: " + ex.getMessage());
+        }
+        if(number < Float.MIN_VALUE || number > Float.MAX_VALUE)
+            throw new Exception ("el valor esta fuera de rango" + Float.MIN_VALUE +":" + Float.MAX_VALUE);
+        return 1 ;
+    }
 
 %}
 
@@ -50,7 +63,7 @@ import java.util.ArrayList;
 %cup
 %line
 %column
-%throws CompilerException , InvalidLengthException
+%throws CompilerException , InvalidLengthException , Exception
 %eofval{
   tablaSimbolos.escribir();
   return symbol(ParserSym.EOF);
@@ -86,7 +99,8 @@ String = "String"
 Letter = [a-zA-Z]
 Digit = [0-9]
 Guion = "-"
-Caracter = [a-z|A-Z|0-9|=|>|<|!|:|+|-|*|/|\"|?|¿|!|¡|@|%|#|&|°|´|\^|`|~|/|\\|_|.|,|;|¬||| ]
+Caracter = [a-zA-ZÀ-ÿ\u00f1\u00d1|0-9|=|>|<|!|:|+|-|*|/|\"|?|¿|!|¡|@|%|#|&|°|´|\^|`|~|/|\\|_|.|,|;|¬||||“|” ]
+Caracter2 = [a-z|A-Z|0-9|=|>|<|!|:|+|-|*|/|\"|?|¿|!|¡|@|%|#|&|°|´|\^|`|~|/|\\|_|.|,|;|¬||||“|” ]
 CteCadena1 = \"([^\"\\]|\\.)*\"
 CteCadena2 = \“([^\“\\]|\\.)*\”
 Init = "init"
@@ -145,9 +159,19 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
    {CteCadena}                               { Simbolo s = new Simbolo(yytext(), yytext(),"CTE_String",yylength());
                                                tablaSimbolos.insertar(s);validarCteCadena(yytext());return symbol(ParserSym.CTE_CADENA, yytext()); }
    {IntegerConstant}                         { Simbolo s = new Simbolo(yytext(), yytext(),"CTE_Int",yylength());
-                                                tablaSimbolos.insertar(s);validarCteInteger(yytext());return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
-   {FloatConstant}                           { Simbolo s = new Simbolo(yytext(), yytext(),"CTE_Float",yylength());
-                                               tablaSimbolos.insertar(s);return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
+                                                tablaSimbolos.insertar(s);
+                                                System.out.println("return Integer");
+                                                validarCteInteger(yytext());
+
+                                                return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+
+
+   {FloatConstant}                           { System.out.println("FLOAT");
+                                                Simbolo s = new Simbolo(yytext(), yytext(),"CTE_Float",yylength());
+                                                System.out.println("return Float");
+                                                validarCteFloat(yytext());
+                                               tablaSimbolos.insertar(s);
+                                               return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
     /* Comments */
    {Comentario}                              { System.out.println("Comentario");/* ignore */ }
 
@@ -158,7 +182,7 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
   {Mult}                                    { return symbol(ParserSym.MULT); }
   {Div}                                     { return symbol(ParserSym.DIV); }
   {And}                                     { return symbol(ParserSym.AND); }
-  {Not}                                     { return symbol(ParserSym.NOT); }
+  {Not}                                     { System.out.println("NOT");return symbol(ParserSym.NOT); }
   {Or}                                      { return symbol(ParserSym.OR); }
 
   {Mayor}                                  { return symbol(ParserSym.MAYOR); }
@@ -182,6 +206,7 @@ FloatConstant = ({Digit}*\.{Digit}+) | ({Digit}+\.{Digit}*)
 
   /* identifiers */
     {Identifier}                             { Simbolo s = new Simbolo(yytext(), yytext(),"",yylength());
+                                                validarCteCadena(yytext());
                                                tablaSimbolos.insertar(s);
                                                return symbol(ParserSym.IDENTIFIER, yytext()); }
 

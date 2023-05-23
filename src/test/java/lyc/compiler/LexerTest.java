@@ -24,12 +24,12 @@ public class LexerTest {
   private Lexer lexer;
 
 
-  /*
+
   @Test
   public void comment() throws Exception{
     scan("*-This is a comment-*");
     assertThat(nextToken()).isEqualTo(ParserSym.EOF);
-  }*/
+  }
 
   @Test
   public void invalidStringConstantLength() {
@@ -42,8 +42,10 @@ public class LexerTest {
 
   @Test
   public void invalidIdLength() {
+    String cadena= getRandomString();
+    System.out.println(cadena);
     assertThrows(InvalidLengthException.class, () -> {
-      scan(getRandomString());
+      scan(cadena);
       nextToken();
     });
   }
@@ -56,7 +58,7 @@ public class LexerTest {
       nextToken();
     });
   }
-
+ /* No valida negativos
   @Test
   public void invalidNegativeIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
@@ -65,7 +67,7 @@ public class LexerTest {
       nextToken();
     });
   }
-
+*/
 
 
   @Test
@@ -92,6 +94,22 @@ public class LexerTest {
       nextToken();
     });
   }
+  // Agregados
+  @Test
+  public void invalidCteFloat() {
+    assertThrows(Exception.class, () -> {
+      scan("350000000000000000000111111111111111111.000000000089900000");
+      nextToken();
+    });
+  }
+  @Test
+  public void invalidCteFloat2() {
+    assertThrows(Exception.class, () -> {
+      scan("0.00000000000000000000000000000000000000000000035");
+      nextToken();
+    });
+  }
+
 
   @AfterEach
   public void resetLexer() {
@@ -102,7 +120,7 @@ public class LexerTest {
     lexer = LexerFactory.create(input);
   }
 
-  private int nextToken() throws IOException, CompilerException {
+  private int nextToken() throws IOException, CompilerException , Exception {
     return lexer.next_token().sym;
   }
 

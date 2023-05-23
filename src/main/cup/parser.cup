@@ -109,13 +109,16 @@ sentence ::= assignment  {: System.out.println("End Assignment"); :}
 ciclo ::=  CICLO OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA
             {: System.out.println("ciclo -> CICLO ( condicion_mul ) { bloque } "); :};
 
-si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("if sin else "); :}
+si ::= IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA {: System.out.println("if (){b} "); :}
         | IF OPEN_BRACKET condicion_mul CLOSE_BRACKET LLAVEABRE bloque LLAVECIERRA ELSE LLAVEABRE bloque LLAVECIERRA
-        {: System.out.println(" if con else"); :};
+        {: System.out.println(" if(){b} else{b}");:}
+       ;
+
 
 condicion_mul ::= condicion AND condicion {: System.out.println("condic_mul -> condicion AND condicion "); :}
                                  | condicion OR condicion {: System.out.println("condicion_mul -> condicion OR condicion "); :}
-                                 | NOT OPEN_BRACKET condicion CLOSE_BRACKET{: System.out.println("condicion_mul -> NOT (condicion) "); :}
+                                 | NOT condicion {: System.out.println("condicion_mul -> NOT condicion "); :}
+                                 | NOT OPEN_BRACKET condicion CLOSE_BRACKET{: System.out.println("condicion_mul -> NOT condicion "); :}
                                  | condicion {: System.out.println("condicion_mul -> condicion "); :};
 
 condicion ::= expression MAYOR expression {: System.out.println("condicion -> expresion MAYOR expresion "); :}

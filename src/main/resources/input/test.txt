@@ -1,19 +1,2 @@
-if (number > 0) {
-  numberSign = "positivo"
-} else {
-  if (number < 0) {
-    numberSign = "negativo"
-  } else {
-    numberSign = "neutral"
-  }
-}
-
-falla
-if (number > 0) {
-  numberSign = "positivo"
-} else
-  if (number < 0) {
-    numberSign = "negativo"
-  } else {
-    numberSign = "neutral"
-  }
+if (not (a <b))
+ {a=b}
